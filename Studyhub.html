@@ -1,0 +1,622 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StudyHub | By Brandy</title>
+
+    <!-- Browser Tab Icon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>😱</text></svg>">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #090a18, #17132c, #0c1025);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #setupScreen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background:
+                radial-gradient(circle at top left, #39306b55, transparent 40%),
+                radial-gradient(circle at bottom right, #4b2b7855, transparent 40%),
+                #090a18;
+            z-index: 100;
+        }
+
+        .setup-box {
+            width: 400px;
+            max-width: 90%;
+            padding: 40px;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            text-align: center;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+        }
+
+        .setup-icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        .setup-box h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .setup-box p {
+            color: #aaa;
+            margin-bottom: 25px;
+        }
+
+        .setup-box input {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            outline: none;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.08);
+            color: white;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .setup-box input::placeholder {
+            color: #888;
+        }
+
+        .setup-box button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: #7657ff;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .setup-box button:hover {
+            transform: translateY(-2px);
+            background: #886cff;
+        }
+
+        #mainApp {
+            display: none;
+            padding: 25px;
+        }
+
+        .topbar {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 22px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(20px);
+            margin-bottom: 25px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .brand-icon {
+            font-size: 27px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: right;
+        }
+
+        .profile-name {
+            font-weight: bold;
+        }
+
+        .profile-subtitle {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .clock {
+            color: #aaa;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .hero {
+            padding: 35px;
+            border-radius: 25px;
+            background:
+                linear-gradient(135deg, rgba(118,87,255,0.2), rgba(255,255,255,0.05));
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            color: #aaa;
+            margin-bottom: 25px;
+        }
+
+        .search {
+            display: flex;
+            gap: 10px;
+            max-width: 650px;
+        }
+
+        .search input {
+            flex: 1;
+            padding: 15px 18px;
+            border: none;
+            outline: none;
+            border-radius: 14px;
+            background: rgba(0,0,0,0.25);
+            color: white;
+            font-size: 15px;
+        }
+
+        .search button {
+            border: none;
+            border-radius: 14px;
+            padding: 0 22px;
+            background: #7657ff;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .section-title {
+            margin: 25px 0 15px;
+            font-size: 18px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .card {
+            padding: 22px;
+            min-height: 140px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            background: rgba(255,255,255,0.09);
+        }
+
+        .card-icon {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            margin-bottom: 6px;
+        }
+
+        .card p {
+            color: #999;
+            font-size: 13px;
+        }
+
+        .links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .link {
+            text-decoration: none;
+            color: white;
+            padding: 17px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: 0.2s;
+        }
+
+        .link:hover {
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .change-user {
+            margin-top: 25px;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.07);
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .change-user:hover {
+            color: white;
+            background: rgba(255,255,255,0.12);
+        }
+
+        @media (max-width: 600px) {
+            #mainApp {
+                padding: 12px;
+            }
+
+            .topbar {
+                padding: 0 15px;
+            }
+
+            .clock {
+                display: none;
+            }
+
+            .hero {
+                padding: 25px;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Username Setup -->
+    <div id="setupScreen">
+        <div class="setup-box">
+            <div class="setup-icon">😱</div>
+
+            <h1>StudyHub | By Brandy</h1>
+
+            <p>Enter your username to get started.</p>
+
+            <input
+                id="usernameInput"
+                type="text"
+                placeholder="Enter your username..."
+                autocomplete="off"
+            >
+
+            <button onclick="saveUsername()">Continue</button>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp">
+
+        <div class="topbar">
+
+            <div class="brand">
+                <div class="brand-icon">😱</div>
+                <div>StudyHub | By Brandy</div>
+            </div>
+
+            <div class="profile">
+                <div>
+                    <div class="profile-name" id="profileName">
+                        Username
+                    </div>
+
+                    <div class="profile-subtitle">
+                        George Lennox
+                    </div>
+                </div>
+
+                <div class="clock" id="clock">
+                    12:00 PM
+                </div>
+            </div>
+
+        </div>
+
+        <div class="hero">
+
+            <h1>
+                Welcome back, <span id="welcomeName">Username</span>.
+            </h1>
+
+            <p>
+                Everything you need for school, studying, and productivity.
+            </p>
+
+            <div class="search">
+
+                <input
+                    id="searchInput"
+                    type="text"
+                    placeholder="Search Google..."
+                >
+
+                <button onclick="searchGoogle()">
+                    Search
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="section-title">
+            Your StudyHub
+        </div>
+
+        <div class="cards">
+
+            <div class="card">
+                <div class="card-icon">📚</div>
+                <h3>My Classes</h3>
+                <p>Keep track of your classes and school work.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">✅</div>
+                <h3>Tasks</h3>
+                <p>Stay organized with your assignments.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">📝</div>
+                <h3>Notes</h3>
+                <p>Keep important notes in one place.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">⏱️</div>
+                <h3>Study Timer</h3>
+                <p>Focus on your work and manage your time.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h3>Progress</h3>
+                <p>See how you're doing with your studying.</p>
+            </div>
+
+        </div>
+
+        <div class="section-title">
+            Quick Links
+        </div>
+
+        <div class="links">
+
+            <a
+                class="link"
+                href="https://www.connexus.com/"
+                target="_blank"
+            >
+                🏫 Connexus
+            </a>
+
+            <a
+                class="link"
+                href="https://www.google.com/"
+                target="_blank"
+            >
+                🔎 Google
+            </a>
+
+            <a
+                class="link"
+                href="https://www.youtube.com/"
+                target="_blank"
+            >
+                ▶️ YouTube
+            </a>
+
+            <a
+                class="link"
+                href="https://mail.google.com/"
+                target="_blank"
+            >
+                ✉️ Gmail
+            </a>
+
+            <a
+                class="link"
+                href="https://www.reddit.com/r/memes/"
+                target="_blank"
+            >
+                😂 Memes
+            </a>
+
+            <a
+                class="link"
+                href="https://www.google.com/chrome/"
+                target="_blank"
+            >
+                🌐 Chrome
+            </a>
+
+        </div>
+
+        <button class="change-user" onclick="changeUsername()">
+            Change Username
+        </button>
+
+    </div>
+
+    <script>
+
+        // Load saved username
+        window.onload = function() {
+
+            const savedUsername =
+                localStorage.getItem("studyhubUsername");
+
+            if (savedUsername) {
+                showApp(savedUsername);
+            }
+
+            document
+                .getElementById("usernameInput")
+                .focus();
+        };
+
+
+        // Save username
+        function saveUsername() {
+
+            const input =
+                document.getElementById("usernameInput");
+
+            const username =
+                input.value.trim();
+
+            if (username === "") {
+                input.focus();
+                return;
+            }
+
+            localStorage.setItem(
+                "studyhubUsername",
+                username
+            );
+
+            showApp(username);
+        }
+
+
+        // Show main app
+        function showApp(username) {
+
+            document.getElementById("setupScreen")
+                .style.display = "none";
+
+            document.getElementById("mainApp")
+                .style.display = "block";
+
+            document.getElementById("profileName")
+                .textContent = username;
+
+            document.getElementById("welcomeName")
+                .textContent = username;
+        }
+
+
+        // Change username
+        function changeUsername() {
+
+            localStorage.removeItem(
+                "studyhubUsername"
+            );
+
+            document.getElementById("mainApp")
+                .style.display = "none";
+
+            document.getElementById("setupScreen")
+                .style.display = "flex";
+
+            const input =
+                document.getElementById("usernameInput");
+
+            input.value = "";
+            input.focus();
+        }
+
+
+        // Enter key for username
+        document
+            .getElementById("usernameInput")
+            .addEventListener("keydown", function(event) {
+
+                if (event.key === "Enter") {
+                    saveUsername();
+                }
+
+            });
+
+
+        // Google search
+        function searchGoogle() {
+
+            const input =
+                document.getElementById("searchInput");
+
+            const query =
+                input.value.trim();
+
+            if (query !== "") {
+
+                window.open(
+                    "https://www.google.com/search?q=" +
+                    encodeURIComponent(query),
+                    "_blank"
+                );
+
+            }
+        }
+
+
+        // Enter key for Google search
+        document
+            .getElementById("searchInput")
+            .addEventListener("keydown", function(event) {
+
+                if (event.key === "Enter") {
+                    searchGoogle();
+                }
+
+            });
+
+
+        // Live clock
+        function updateClock() {
+
+            const now = new Date();
+
+            document.getElementById("clock")
+                .textContent =
+                now.toLocaleTimeString([], {
+                    hour: "numeric",
+                    minute: "2-digit"
+                });
+        }
+
+        updateClock();
+
+        setInterval(updateClock, 1000);
+
+    </script>
+
+</body>
+</html>
+```
+
+This keeps the **😱 emoji in the actual browser tab**, as well as the existing 😱 icons inside StudyHub.
